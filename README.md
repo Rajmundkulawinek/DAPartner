@@ -1,6 +1,6 @@
-# DACloner
+# DAPartner
 
-**DACloner** is an open-source tool for modeling the **star schema** layer in data warehouses.  
+**DAPartner** is an open-source tool for modeling the **star schema** layer in data warehouses.  
 It enables requirements gathering, creation of dimensions and fact tables following the **Kimball** approach, and then supports the process of documenting and automating DWH projects.
 
 ## 🔧 Tech Stack
@@ -18,5 +18,5 @@ The project uses:
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/rajmundkulawinek/DACloner.git
-cd DACloner
+git clone https://github.com/rajmundkulawinek/DAPartner.git
+cd DAPartner
