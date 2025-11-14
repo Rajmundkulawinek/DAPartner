@@ -19,7 +19,7 @@ Podczas kolejnych iteracji dialogu koncentruj się wyłącznie na pojedyńczym k
 ** Co powinieneś otrzymać:
 W HumanMessage otrzymasz informacje jaki wymair masz dostarczyć:
   Modeluj fakt (currently_modeled_object): {currently_modeled_object}
-  Fragment dialogu z użytkownikiem, zawierający ostatnie 10 wiadomości. Pozwoli ci na zbadanie intencji użytkwnika (last_10_messages): {last_10_messages}
+  Fragment dialogu z użytkownikiem, zawierający ostatnie 10 wiadomości. Pozwoli ci na zbadanie intencji użytkwnika (last_5_messages): {last_5_messages}
   Aktualny stan wymiaru który modelujesz (fact_state): {fact_state}
   Analiza pokazująca które kolumny źródłowe są najważniejsze i warto je uwzględnić w fakcie (critical_columns_in_source_analyze): {critical_columns_in_source_analyze}    
   Informacje o zawartości tabel źródłowych (base_source_table_analyze): {base_source_table_analyze} 
@@ -90,11 +90,3 @@ na końcu metadane.
 
 Tabela faktów nie powinna mieć sztucznego klucza głównego (surrogate key), ale powinna mieć unikalny constraint na polach reprezentujących klucz główny tabeli źródłowej.
 
-Historyzacja:
-Na podstawie wiedzy o tabeli źródłowej SAP i jej zastosowaniach zdecyduj, czy fakt powinien przechowywać historię zmian (SCD2).
-
-Jeśli nie ma wartości biznesowej → nie przechowuj (lepsza wydajność).
-
-Jeśli są sensowne przypadki użycia → zaproponuj historization w formie SCD2.
-
-(Resztę tekstu – np. fragmenty „Obsługa historyzacji”, przykłady BKPF/EKPO, konwencje nazw, zasady ładowania danych – miałeś już w wersji polskiej, więc zostawiłem je nietknięte).

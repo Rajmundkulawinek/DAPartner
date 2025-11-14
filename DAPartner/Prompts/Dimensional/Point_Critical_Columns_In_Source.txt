@@ -15,8 +15,9 @@ Decision criteria (tightened for dimensions)
 Pre-filters (apply first; override only by P1):
 - Audit/technical fields (ERDAT/ERNAM/AEDAT/AENAM/CPUDT/CPUTM, GUID*, hashes), process flags (X*/IND*/FLG*), long texts (RAW/LRAW/STRING/XML/JSON/>255), address/communication → SKIP.
 - Units/currencies without a descriptive measure → SKIP.
+- EXCEPTIONS (allow TAKE when commonly used as filters): ERDAT/AEDAT (lifecycle), LOEVM/SPERR (deletion/blocked), base UoM MEINS, units tied to inherent properties (e.g., GEWEI/VOLEH).
 
-Dimension gate (must satisfy BOTH to be eligible for TAKE):
+Dimension gate (must satisfy AT LEAST ONE: stable attribute OR usable as slicer):
 - Stable semantic attribute (slowly-changing; not transient transaction detail).
 - Usable as slicer/grouping in reports.
 
@@ -29,12 +30,12 @@ P5 Potential measures → default SKIP for dimensions; TAKE only for inherent de
 P6 Units/currencies → TAKE only when P5 was taken as descriptive property.
 P7 Org/location/hierarchies (BUKRS, WERKS, PRCTR, KOSTL, VKORG, VTWEG, SPART, Segment, Ledger Group, Doc Type/Overall Status) → TAKE.
 P8 Storage-heavy/free text → TAKE only one short/<=120 chars description; long text → SKIP.
-P9 Technical/process flags → SKIP unless clearly used as slicer.
+P9 Technical/process flags → SKIP unless clearly used as slicer. Process flags used as common slicers (LOEVM/SPERR/overall status) → TAKE.
 P10 Duplicates/derivables → keep code + one short text (default language); derivables → SKIP.
 
 Anti-bloat rules:
-- Non-P1 fields require ≥2 signals among {P2, P3, P4, P7}, else SKIP.
-- Keep only one short description per code; other languages go to dim_<obj>_text.
+- Non-P1 fields require ≥1 signals among {P2, P3, P4, P7}, else SKIP.
+- Keep only one short description per code; other languages go to dim_<obj>_multilanguage.
 - Do not include attributes already present in other conformed dimensions (cross-check).
 
 ** Style & constraints ** 

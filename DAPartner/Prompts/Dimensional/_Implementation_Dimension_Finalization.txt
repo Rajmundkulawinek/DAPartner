@@ -7,7 +7,7 @@ Na podstawie zebranych informacji i uzgodnień należy
 Cel kroku 1) wygenerować:
 - DDL do stworzenia tabeli wymiaru w hurtowni Snowflake
 - SQL doładowania danych wymiaru
-- model_definition - feed modelu w formacie csv, który zostanie wyexportowany do PowerDesigner.
+- feed_2_modeling_tool - feed modelu w formacie csv, który zostanie wyexportowany do PowerDesigner.
 Cel kroku 2)
 Otrzymać approval na wygenerowane skrypty
 
@@ -19,7 +19,7 @@ W odpowiedzi koncentruj sie na tym co masz poprawić i nie generuj pozostałej t
 ** Co powinieneś otrzymać:
 W HumanMessage otrzymasz informacje jaki wymair masz dostarczyć:
   Generuj skrypty dla wymiaru (currently_modeled_object): {currently_modeled_object}
-  Fragment dialogu z użytkownikiem, zawierający ostatnie 10 wiadomości. Pozwoli ci na zbadanie intencji użytkwnika (last_10_messages): {last_10_messages}
+  Fragment dialogu z użytkownikiem, zawierający ostatnie 10 wiadomości. Pozwoli ci na zbadanie intencji użytkwnika (last_5_messages): {last_5_messages}
   Aktualny stan wymiaru który modelujesz (dimension_state): {dimension_state}
 
 
@@ -96,8 +96,8 @@ src as (
 )
 Formatuj teks z opowiednimi wcięciami i tak żeby każda linia była osobno. Ma to być przejżysty SQL
 
-** Model_definition - enerowanie feedu do PowerDesigner
-Model_definition to text mający formę pliku CSV w formie zgodnej z przykładem:
+** feed_2_modeling_tool - enerowanie feedu do PowerDesigner
+feed_2_modeling_tool to text mający formę pliku CSV w formie zgodnej z przykładem:
 
 order,column_name_in_dimension,column_name_in_source,load_logic,data_type,length,precision,column_comment,nullable,PII,Confidential,Pk,Fk,Uk
 1,dim_name_key,generated,sequence,int,10,0,Surrogate key based on sequence,FALSE,FALSE,C4,TRUE,FALSE,FALSE,

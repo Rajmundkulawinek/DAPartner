@@ -1,0 +1,43 @@
+""" Masz dialog z użytkownikiem. Twoim zadaniem jest określić, jakie fakty i wymiary ostatecznie chce zamodelować użytkownik. Oraz na jakie dodatkowe tabele źródłowe się godzi. Wywnioskuj czy odpowiedź dostarcza:
+1) lista faktów do zamodelowania. Lista trafi do zmiennej: facts_to_create
+2) lista wymiarów do zamodelowania. Lista trafi do zmiennej: dimensions_to_create
+3) lista dodatkowych tabel proponowana przez czat podczas analizy: additional_source_tables
+4) potwierdzenie że to kompletna lista dodatkowych źródeł. Taki potwierdzenie trafi zmiennej: additional_source_tables_approved. Miej pewność że znalazłeś wszytkie dodatkowe tabele które zatwierdził user.
+5) potwierdzenie że to kompletna lista obiektów do zamodelowania (faktów i wymiarów). Taki approval trafi zmiennej: objects_to_create_approved.
+Jeżeli znajdziesz w odpowiedzi potwierdzenie że to kompletna lista to zwróć json pozwalający na zapis danych do obiektów stanu:
+
+class FactToCreate(BaseModel):
+  fact_name:              str  # mandatory
+  fact_main_source_table:      List[str]  # mandatory
+  fact_other_source_tables:    Optional[List[str]] = Field(default=None)
+  fact_connected_dimensions:   Optional[List[str]] = Field(default=None)
+
+class ContextFact(BaseModel):
+    context_fact_name:              		str  # mandatory
+    context_fact_comment:      			    Optional[str] = Field(default=None, description="Business description of fact with information about main source table" )
+    context_fact_source:      			    List[str] = Field(description="Name of main fact which is feeding curent fact" ) 
+    context_fact_filtration:                bool = Field(default=False, description="Where condition which filtering proper subset for fact from main table" )
+
+class DimensionToCreate(BaseModel):
+  dimension_name:                         str  # mandatory
+  main_source_table:                      List[str]  # mandatory
+  business_key_on_source_side:            Optional[List[str]] = Field(default=None, description="Point which column from source table is the busines key" )
+  other_source_tables:                    Optional[List[str]] = Field(default=None, description="Point other tables which need to build compex dimension" )
+  surrogate_key:                          Optional[str] = Field(default=None, description="Point surrodate key in final dim. Usually dim_<name>_key" )
+
+# MAIN class: DesignState
+class DesignState(BaseModel):
+  additional_source_tables:           Optional[List[str]] = Field( default_factory=list, description="Tabele źródłowe zaproponowane i zaakceptowane w wyniku analizy" )
+  additional_source_tables_approved:  bool = Field( default=False, description="Czy user zaakceptował dodatkową listę tabel żródłowych- zaproponowaną mu na czacie?" )
+  objects_to_create_approved :        bool = Field( default=False, description="Czy user zaakceptował listę faktów / wymiarów do zamodelowania?")
+  facts_to_create:                    List[FactToCreate] = Field(default_factory=list, description="Lista faktów do stworzenia wraz z ich szczegółami" )
+  dimensions_to_create:               List[DimensionToCreate] = Field(default_factory=list, description="Lista wymiarów do stworzenia wraz z ich szczegółami" )
+  
+*** Tips:
+1) Pamiętaj żeby uzupełniać other_source_tables zarówno po stronie DesignState jak i DimensionToCreate oraz FactToCreate, jeżeli posiadamy dodatkową tabelę źródłową dla danego faktu lub wymiaru.
+2) Czasami user doprecyzowuje jakie tabele źródłowe powinny zasilać jaki wymiar/fakt. Dodaj je wszystkie do other_source_tables zarówno po stronie DesignState jak i DimensionToCreate.
+3) Istnieją dwa rodzaje faktów: tradycyjne oraz kontekstowe. 
+    Tradycyjne ładujemy na podstawie tabel źródłowych z SAP i są tradycyjnymi tabelami faktów modelowanymi jako FactToCreate. 
+    Kontekstowe to podzbiory faktów głównych, które są widokami bazującymi na głównym fakcie, odfiltrowując fragment jego danych. Modelujemy je jako ContextFact.
+4) Analizuj który fakt/wymiar jest propozycją a który alternatywą. Do stanu zapisuj wyłącznie główne propozycje, nie zapominając o ich wszystkich tabelach źródłowych. 
+"""
